@@ -71,3 +71,77 @@ tar -xzf Image-ExifTool-9.43.tar.gz
   1. Exercise: ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/APT/mswab_yayih/Mswab_Yayih_FD1BE09E499E8E380424B3835FC973A8_2012-03.pcap local```
   2. With file extraction: ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/APT/mswab_yayih/Mswab_Yayih_FD1BE09E499E8E380424B3835FC973A8_2012-03.pcap site/local.bro extract-all-files.bro```   
   3. Analyze requests/responses: ```for i in `bro-grep info.asp http.log | bro-cut orig_fuids resp_fuids | sed -e 's/\t/\n/' | grep -v '-'`; do cat "extract_files/extract-HTTP-$i"; echo; echo "-------"; done```
+  4. blackhole-medfos
+    1. Let's get started with a couple of warm up exercises.  Blackhole is one of the most common and frequently updated exploit kits around.  Let's see what they look like with Bro's new File Analysis Framework.
+	2. How many executable files were downloaded to the host?
+    3. ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/CRIME/blackhole-medfos
+EK_BIN_Blackhole_leadingto_Medfos_0512E73000BCCCE5AFD2E9329972208A_2013-04.pcap local```
+    4. How many executable files were downloaded?
+	5. ```less files.log | grep "application" | wc -l```
+	6. What notices were fired?
+    7. ```less notice.log```
+  5-smokekt150
+    1. We have Bro identifying signatures in ports and protocols that it understands; in this example, we are going to have Bro key on a specific protocol related feature.
+    2. Let's replay the sample with Bro: ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/CRIME/EK_Smokekt150\(Malwaredontneedcoffee\)_2012-09.pcap local```
+	3. Explore the log files; I see a number of potential canidates for items we could fire on.  Let's look a little deeper.  Take a look at the specified .bro file; what are we doing here?  Let's replay the pcap extracting header names and values. [script](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/extract-header-names-and-values.bro)
+    4. Now let's investigate the http.log a little further.  Lets look a little closer at those http header values:
+    5. ```less http.log | bro-cut server_header_names server_header_values```
+
+This content type looks a little weird to me..
+
+			text/html; charset=win-1251
+
+What is that?
+```
+http://en.wikipedia.org/wiki/Windows-1251
+	Windows-1251 (a.k.a. code page CP1251) is a popular 8-bit character encoding, designed to cover languages that use the Cyrillic script such as Russian, Bulgarian, Serbian Cyrillic and other languages. It is the most widely used for encoding the Bulgarian, Serbian and Macedonian languages
+```
+Is that normal for our environment?  Let's see if we can match on that.
+
+```bro
+@load base/protocols/http/main
+@load base/frameworks/notice
+
+module HTTP;
+ 
+export {
+	redef enum Notice::Type += {
+		## raised once per host per 10 min
+		Bad_Header
+	};
+
+	global bad_header: set[addr] &create_expire = 10 min;
+}
+ 
+event http_header(c: connection, is_orig: bool, name: string, value: string) &priority=3
+  {
+     if ( name == "CONTENT-TYPE" && value == "text/html; charset=win-1251" )
+     {	
+	 if ( c$id$orig_h !in bad_header )
+	 {
+		add bad_header[c$id$orig_h];
+		NOTICE([$note=HTTP::Bad_Header,
+		 $msg=fmt("Bad header \"%s\" seen in %s", value,c$uid),
+		 $sub=name,
+		 $conn=c,
+		 $identifier=fmt("%s", c$id$orig_h)]);
+		
+
+		print fmt("%s :name:value:  %s:%s",c$uid,name,value);
+	 }
+     }
+  }
+```
+
+This code is overly simple; every time we see an http header key pair this event fires.  We simply look the event and are checking specifically for the Cyrillic language.
+
+Did you count how many times this header pair was transmitted in the sample?  Here we are thresholding the notice with a global variable called "bad header"; and we time hosts out using the **&create_expire = 10** .
+    global bad_header: set[addr] &create_expire = 10 min;
+    
+Let's go ahead and replay the sample using our new detector.
+
+	bro -r EK_Smokekt150\(Malwaredontneedcoffee\)_2012-09.pcap local  ../solutions/match-headers.bro 
+
+You should now see a thresholded alert in the notice.log.
+
+
