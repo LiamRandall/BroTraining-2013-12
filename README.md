@@ -67,7 +67,18 @@ tar -xzf Image-ExifTool-9.43.tar.gz
   6. Modify ```02_run_exiftool.bro``` with the correct path: ```/home/bro/training/files-framework/exiftool/Image-ExifTool-9.43```
   7. Run ```bro -r /opt/TrafficSamples/faf-traffic.pcap 02_run_exiftool.bro```
   8. Examine exiftool.log
-9. Signature Framework
+9. ICS
+  1. Let's start by looking at the Bro default modbus.log; let's replay some traffic ```bro -r modbus.pcap local```
+  2. What does the modbus.log show?
+  3. It would be nice to have a simple listing of all of modbus pairs for documenting master/slaves; fortunately Bro includes a policy file to perform this for you.  From ~/training/modbus/known_modbus ```bro -C -r ../modbus.pcap /opt/bro/share/bro/policy/protocols/modbus/known-masters-slaves.bro```
+  4. It would be nice to have some additional detail about the ICS traffic we are seeing on the network.  From ~/training/modbus/dump_registers ```bro -r ../modbus.pcap /opt/bro/share/bro/policy/protocols/modbus/track-memmap.bro```
+  5. What are the most frequently accessed registers?
+  6. Inspect the script ```rogue_modbus.bro```- what does it do?
+  7. From ~/training/modbus/rogue_modbus let's go ahead and test it: ```bro -r ../modbus.pcap local ../rogue_modbus.bro```
+  8. Inspect the script ```modbus_master_slave_pairs.bro```- what does it do?
+  9. From ~/training/modbus/discovered_modbus_pair let's execute the script ```bro -r ../modbus.pcap local ../modbus_master_slave_pairs.bro```
+  10. Demonstration & Discussion
+10. Signature Framework
   1. Exercise: ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/APT/mswab_yayih/Mswab_Yayih_FD1BE09E499E8E380424B3835FC973A8_2012-03.pcap local```
   2. With file extraction: ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/APT/mswab_yayih/Mswab_Yayih_FD1BE09E499E8E380424B3835FC973A8_2012-03.pcap site/local.bro extract-all-files.bro```   
   3. Analyze requests/responses: ```for i in `bro-grep info.asp http.log | bro-cut orig_fuids resp_fuids | sed -e 's/\t/\n/' | grep -v '-'`; do cat "extract_files/extract-HTTP-$i"; echo; echo "-------"; done```
