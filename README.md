@@ -8,8 +8,6 @@
   4. logon bro/bro
 1. Class files, either:
   1. /home/bro/training/
-  2. open webpage https://github.com/LiamRandall/BroTraining-2012-12.git
-  3. Download zip from https://github.com/LiamRandall/BsidesDC-Training/archive/master.zip
 2. What is Bro?
   1. Bro is a language first
   2. Event-driven
@@ -37,19 +35,19 @@
   6. Review [HTTP Basic Auth Server Brute Forced Solution](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/detect-http-basic-auth-server-bruteforced.bro)
   7. Execute both detections: ```bro -C -r http-basic-auth-multiple-failures.pcap detect-http-basic-auth-bruteforcer.bro detect-http-basic-auth-server-bruteforced.bro```
   8. Discuss derivations and improvements- tracking by ASN, remote subnet, whitelisting, blacklisting
-  9. Demonstrations.
+  9. Additional Demonstrations of the same technique.
 8. Notice Framework
   1. Exercise: ```bro -r 01_emailing_simple.bro synscan.pcap``` 
   2. Exercise: ```bro -r 02_emailing_complex.bro synscan.pcap```
   3. Exercise: ```bro -r 03_avoid_some_scanners.bro synscan.pcap```
   4. Exercise: ```bro -r 04_create_a_new_notice.bro mbam_download.trace```
   5. Walk-through ```05_create_an_action.bro```
-7. [Intel Framework](https://github.com/broala/training-resources/raw/master/intel-framework/intel-framework.key)
-  1. Exercise 1: [Create An Intel File](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/detect-http-basic-auth-bruteforcer.bro1-create-intel.md)
-  2. Exercise 2: [Notice on Intel Hits](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/detect-http-basic-auth-bruteforcer.bro/2-intel-do-notice.md)
-  2. Exercise 3: [Notice on Spcific Types of Intel Hits](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/detect-http-basic-auth-bruteforcer.bro/3-intel-notice-on-types.md)  
+7. Intel Framework
+  1. Exercise 1: [Create An Intel File](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/1-create-intel.md)
+  2. Exercise 2: [Notice on Intel Hits](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/2-intel-do-notice.md)
+  2. Exercise 3: [Notice on Spcific Types of Intel Hits](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/3-intel-notice-on-types.md)  
   
-8. [Files Framework](https://github.com/broala/training-resources/raw/master/files-framework/files-framework.key)
+8. Files Framework
   1. File extraction demo
     1. Extract files: ```bro -r /opt/TrafficSamples/exercise-traffic.pcap extract-all-files.bro```
     2. Show files: ```nautilus extract_files/```
@@ -67,6 +65,7 @@ cd exiftool/
 wget http://www.sno.phy.queensu.ca/~phil/exiftool/Image-ExifTool-9.43.tar.gz
 tar -xzf Image-ExifTool-9.43.tar.gz
 ```
+
     2. Modify ```02_run_exiftool.bro``` with the correct path: ```/home/bro/training/files-framework/exiftool/Image-ExifTool-9.43```
 	3. Run ```bro -r /opt/TrafficSamples/faf-traffic.pcap 02_run_exiftool.bro```
 	4. Examine exiftool.log
