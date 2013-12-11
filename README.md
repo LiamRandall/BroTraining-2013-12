@@ -57,19 +57,16 @@
     2. Solution: ````01_notice_on_mimetype.bro````
   4. Running the script: ```bro -r /opt/TrafficSamples/faf-traffic.pcap 01_notice_on_mimetype.bro```
   5. Walk-through ````02_run_exiftool.bro````
-    1. Install exiftool.log
-    
+    1. Install exiftool.log 
 ```
 mkdir exiftool
 cd exiftool/
 wget http://www.sno.phy.queensu.ca/~phil/exiftool/Image-ExifTool-9.43.tar.gz
 tar -xzf Image-ExifTool-9.43.tar.gz
 ```
-
   6. Modify ```02_run_exiftool.bro``` with the correct path: ```/home/bro/training/files-framework/exiftool/Image-ExifTool-9.43```
   7. Run ```bro -r /opt/TrafficSamples/faf-traffic.pcap 02_run_exiftool.bro```
   8. Examine exiftool.log
-
 9. Signature Framework
   1. Exercise: ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/APT/mswab_yayih/Mswab_Yayih_FD1BE09E499E8E380424B3835FC973A8_2012-03.pcap local```
   2. With file extraction: ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/APT/mswab_yayih/Mswab_Yayih_FD1BE09E499E8E380424B3835FC973A8_2012-03.pcap site/local.bro extract-all-files.bro```   
