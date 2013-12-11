@@ -30,7 +30,8 @@
   3. What were the status codes by username?
 7. Sumstats Introduction
   1. What is sumstats
-  2. Review ([FTP Bruteforcing](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/brute-force.md))
+  2. Review [FTP Bruteforcing](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/brute-force.md)
+  3. Review the previous exercise
 https://github.com/LiamRandall/BroTraining-2013-12/blob/master/brute-force.md
 8. [Notice Framework](https://github.com/broala/trainings-resources/raw/master/notice-framework/broala-bro-ids-v2.2-notice.log_Overview.pptx)
   1. Exercise: ```bro -r 01_emailing_simple.bro synscan.pcap``` ([script](https://github.com/broala/training-resources/raw/master/notice-framework/01_emailing_simple.bro), [pcap](https://github.com/broala/training-resources/raw/master/notice-framework/synscan.pcap))
