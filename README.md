@@ -31,27 +31,47 @@
 7. Sumstats Introduction
   1. What is sumstats
   2. Review [FTP Bruteforcing](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/brute-force.md)
-  3. Review the previous exercise
-https://github.com/LiamRandall/BroTraining-2013-12/blob/master/brute-force.md
-8. [Notice Framework](https://github.com/broala/trainings-resources/raw/master/notice-framework/broala-bro-ids-v2.2-notice.log_Overview.pptx)
-  1. Exercise: ```bro -r 01_emailing_simple.bro synscan.pcap``` ([script](https://github.com/broala/training-resources/raw/master/notice-framework/01_emailing_simple.bro), [pcap](https://github.com/broala/training-resources/raw/master/notice-framework/synscan.pcap))
-  2. Exercise: ```bro -r 02_emailing_complex.bro synscan.pcap``` ([script](https://github.com/broala/training-resources/raw/master/notice-framework/02_emailing_complex.bro), [pcap](https://github.com/broala/training-resources/raw/master/notice-framework/synscan.pcap))
-  3. Exercise: ```bro -r 03_avoid_some_scanners.bro synscan.pcap``` ([script](https://github.com/broala/training-resources/raw/master/notice-framework/03_avoid_some_scanners.bro), [pcap](https://github.com/broala/training-resources/raw/master/notice-framework/synscan.pcap))
-  4. Exercise: ```bro -r 04_create_a_new_notice.bro mbam_download.trace``` ([script](https://github.com/broala/training-resources/raw/master/notice-framework/04_create_a_new_notice.bro), [pcap](https://github.com/broala/training-resources/raw/master/notice-framework/mbam_download.trace))
-  5. Walk-through [05_create_an_action.bro](https://github.com/broala/training-resources/raw/master/notice-framework/05_create_an_action.bro)
+  3. Review the previous exercise- can we apply this model to detect http basic auth bruteforcing?  Suggest some methods.
+  4. Based on the previous example can you implement a solution?  For bruteforcers?  For the bruteforced?
+  5. Review [HTTP Basic Auth Brute Forcer Solution](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/detect-http-basic-auth-bruteforcer.bro)
+  6. Review [HTTP Basic Auth Server Brute Forced Solution](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/detect-http-basic-auth-server-bruteforced.bro)
+  7. Execute both detections: ```bro -C -r http-basic-auth-multiple-failures.pcap detect-http-basic-auth-bruteforcer.bro detect-http-basic-auth-server-bruteforced.bro```
+  8. Discuss derivations and improvements- tracking by ASN, remote subnet, whitelisting, blacklisting
+  9. Demonstrations.
+8. Notice Framework
+  1. Exercise: ```bro -r 01_emailing_simple.bro synscan.pcap``` 
+  2. Exercise: ```bro -r 02_emailing_complex.bro synscan.pcap```
+  3. Exercise: ```bro -r 03_avoid_some_scanners.bro synscan.pcap```
+  4. Exercise: ```bro -r 04_create_a_new_notice.bro mbam_download.trace```
+  5. Walk-through ```05_create_an_action.bro```
 7. [Intel Framework](https://github.com/broala/training-resources/raw/master/intel-framework/intel-framework.key)
-  1. [Exercise](https://gist.github.com/grigorescu/6495962)
-  2. [Exercise](https://gist.github.com/grigorescu/6496507)
-  3. [Exercise](https://gist.github.com/grigorescu/6497534)
+  1. Exercise 1: [Create An Intel File](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/detect-http-basic-auth-bruteforcer.bro1-create-intel.md)
+  2. Exercise 2: [Notice on Intel Hits](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/detect-http-basic-auth-bruteforcer.bro/2-intel-do-notice.md)
+  2. Exercise 3: [Notice on Spcific Types of Intel Hits](https://github.com/LiamRandall/BroTraining-2013-12/blob/master/detect-http-basic-auth-bruteforcer.bro/3-intel-notice-on-types.md)  
+  
 8. [Files Framework](https://github.com/broala/training-resources/raw/master/files-framework/files-framework.key)
   1. File extraction demo
-    1. Extract files: ```bro -r /opt/TrafficSamples/exercise-traffic.pcap extract-all-files.bro``` ([script](https://github.com/broala/training-resources/raw/master/files-framework/extract-all-files.bro))
+    1. Extract files: ```bro -r /opt/TrafficSamples/exercise-traffic.pcap extract-all-files.bro```
     2. Show files: ```nautilus extract_files/```
     3. Play a video: ```totem "extract_files/"`ls -S1 extract_files | head -n 1````
-  3. Writing a script: ([shell](https://github.com/broala/training-resources/raw/master/files-framework/01_notice_on_mimetype_shell.bro), [solution](https://github.com/broala/training-resources/raw/master/files-framework/01_notice_on_mimetype.bro))
-  4. Running the script: ```bro -r 01_notice_on_mimetype.bro /opt/TrafficSamples/faf-traffic.pcap```
-  5. Walk-through [02_run_exiftool.bro](https://github.com/broala/training-resources/raw/master/files-framework/02_run_exiftool.bro)
-9. [Signature Framework](https://github.com/broala/training-resources/raw/master/signature-framework/signature-framework.key)
-  1. Exercise: ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/APT/mswab_yayih/Mswab_Yayih_FD1BE09E499E8E380424B3835FC973A8_2012-03.pcap site/local.bro```
-  2. With file extraction: ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/APT/mswab_yayih/Mswab_Yayih_FD1BE09E499E8E380424B3835FC973A8_2012-03.pcap site/local.bro extract-all-files.bro``` ([script](https://github.com/broala/training-resources/raw/master/files-framework/extract-all-files.bro))
+  3. Writing a script, beginging with the template, can you generate a notice on a specific file type? 
+    1. ```01_notice_on_mimetype_shell.bro```
+    2. Solution: ````01_notice_on_mimetype.bro````
+  4. Running the script: ```bro -r /opt/TrafficSamples/faf-traffic.pcap 01_notice_on_mimetype.bro```
+  5. Walk-through ````02_run_exiftool.bro````
+    1. Install exiftool.log
+    
+```
+mkdir exiftool
+cd exiftool/
+wget http://www.sno.phy.queensu.ca/~phil/exiftool/Image-ExifTool-9.43.tar.gz
+tar -xzf Image-ExifTool-9.43.tar.gz
+```
+    2. Modify ```02_run_exiftool.bro``` with the correct path: ```/home/bro/training/files-framework/exiftool/Image-ExifTool-9.43```
+	3. Run ```bro -r /opt/TrafficSamples/faf-traffic.pcap 02_run_exiftool.bro```
+	4. Examine exiftool.log
+
+9. Signature Framework
+  1. Exercise: ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/APT/mswab_yayih/Mswab_Yayih_FD1BE09E499E8E380424B3835FC973A8_2012-03.pcap local```
+  2. With file extraction: ```bro -r /opt/PCAPS_TRAFFIC_PATTERNS/APT/mswab_yayih/Mswab_Yayih_FD1BE09E499E8E380424B3835FC973A8_2012-03.pcap site/local.bro extract-all-files.bro```   
   3. Analyze requests/responses: ```for i in `bro-grep info.asp http.log | bro-cut orig_fuids resp_fuids | sed -e 's/\t/\n/' | grep -v '-'`; do cat "extract_files/extract-HTTP-$i"; echo; echo "-------"; done```
